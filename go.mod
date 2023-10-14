@@ -1,6 +1,6 @@
-module github.com/arcsub/go-moysklad
+module github.com/ivanrybintsev/go-moysklad
 
-go 1.21.0
+go 1.21
 
 require (
 	github.com/google/go-querystring v1.1.0
