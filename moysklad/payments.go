@@ -5,14 +5,14 @@ import (
 )
 
 // PaymentInDocument Входящий платеж, Приходный ордер
-type PaymentInDocument struct {
+type PaymentDocument struct {
 	Meta *Meta `json:"meta"`
 	raw  json.RawMessage
 }
 
 // UnmarshalJSON анмаршалит Входящий платеж, Приходный ордер, при expand=payments
-func (p *PaymentInDocument) UnmarshalJSON(data []byte) (err error) {
-	type alias PaymentInDocument
+func (p *PaymentDocument) UnmarshalJSON(data []byte) (err error) {
+	type alias PaymentDocument
 	var t alias
 
 	if err = json.Unmarshal(data, &t); err != nil {
@@ -20,43 +20,13 @@ func (p *PaymentInDocument) UnmarshalJSON(data []byte) (err error) {
 	}
 
 	t.raw = data
-	*p = PaymentInDocument(t)
+	*p = PaymentDocument(t)
 
 	return nil
 }
 
 // PaymentsIn Входящие платежи, Приходные ордеры
-type PaymentsIn []PaymentInDocument
-
-// PaymentOutDocument Исходящий платеж, Расходный ордер
-type PaymentOutDocument struct {
-	Meta *Meta `json:"meta"`
-	raw  json.RawMessage
-}
-
-// UnmarshalJSON анмаршалит Исходящий платеж, Расходный ордер, при expand=payments
-func (p *PaymentOutDocument) UnmarshalJSON(data []byte) (err error) {
-	type alias PaymentOutDocument
-	var t alias
-
-	if err = json.Unmarshal(data, &t); err != nil {
-		return err
-	}
-
-	t.raw = data
-	*p = PaymentOutDocument(t)
-
-	return nil
-}
-
-// PaymentsOut Исходящие платежи, Расходные ордеры
-type PaymentsOut []PaymentOutDocument
-
-// Payments срез всех типов платежей
-type Payments struct {
-	PaymentsIn
-	PaymentsOut
-}
+type Payments []PaymentDocument
 
 //
 //func (p PaymentInDocument) Data() json.RawMessage {
