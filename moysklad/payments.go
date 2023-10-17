@@ -52,11 +52,29 @@ func (p *PaymentOutDocument) UnmarshalJSON(data []byte) (err error) {
 // PaymentsOut Исходящие платежи, Расходные ордеры
 type PaymentsOut []PaymentOutDocument
 
-// Payments срез всех типов платежей
-type Payments struct {
-	PaymentsIn
-	PaymentsOut
+// PaymentDocument Любой платежный документ
+type PaymentDocument struct {
+	Meta *Meta `json:"meta"`
+	raw  json.RawMessage
 }
+
+// UnmarshalJSON анмаршалит любой платежный документ, при expand=payments
+func (p *PaymentDocument) UnmarshalJSON(data []byte) (err error) {
+	type alias PaymentDocument
+	var t alias
+
+	if err = json.Unmarshal(data, &t); err != nil {
+		return err
+	}
+
+	t.raw = data
+	*p = PaymentDocument(t)
+
+	return nil
+}
+
+// Payments срез всех типов платежей
+type Payments []PaymentDocument
 
 //
 //func (p PaymentInDocument) Data() json.RawMessage {
